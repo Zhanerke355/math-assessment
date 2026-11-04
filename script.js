@@ -1,290 +1,238 @@
 
-// 1. QUESTIONS
-
 const questions = [
     {
-        question: "What is the probability of getting heads when flipping a fair coin?",
-        options: ["1/4", "1/2", "1/3", "1"],
-        correct: ["1/2"],
-        difficulty: "Easy"
+        question: "1. What is the probability of getting heads when tossing a fair coin?",
+        answers: ["1/2", "1/3", "1/4", "1"],
+        correct: "1/2"
     },
     {
-        question: "What is the probability of rolling a 4 on a fair six-sided die?",
-        options: ["1/2", "1/3", "1/6", "1/4"],
-        correct: ["1/6"],
-        difficulty: "Easy"
+        question: "2. What is the probability of rolling a 4 on a fair six-sided die?",
+        answers: ["1/2", "1/6", "1/3", "1/4"],
+        correct: "1/6"
     },
     {
-        question: "A bag contains 3 red balls and 2 blue balls. What is P(red)?",
-        options: ["2/5", "3/5", "1/2", "3/2"],
-        correct: ["3/5"],
-        difficulty: "Easy"
+        question: "3. A bag contains 3 red balls and 2 blue balls. What is P(red)?",
+        answers: ["2/5", "1/5", "3/5", "1/2"],
+        correct: "3/5"
     },
     {
-        question: "Two fair coins are tossed. What is the probability of getting exactly one head?",
-        options: ["1/4", "1/2", "3/4", "1"],
-        correct: ["1/2"],
-        difficulty: "Medium"
+        question: "4. Two fair coins are tossed. What is the probability of getting exactly one head?",
+        answers: ["1/4", "1/2", "3/4", "1"],
+        correct: "1/2"
     },
     {
-        question: "What is the probability of drawing a king from a standard 52-card deck?",
-        options: ["1/4", "1/26", "1/13", "4/13"],
-        correct: ["1/13"],
-        difficulty: "Medium"
+        question: "5. What is the probability of selecting a King from a standard 52-card deck?",
+        answers: ["1/4", "1/13", "4/13", "1/52"],
+        correct: "1/13"
     },
     {
-        question: "Select all correct statements about probability.",
-        options: [
+        question: "6. Which statements about probability are correct? Select ALL correct answers.",
+        answers: [
             "Probability is between 0 and 1",
-            "An impossible event has probability 1",
             "An impossible event has probability 0",
-            "The probabilities of all outcomes sum to 1"
+            "The sum of all probabilities is 1",
+            "Probability can be greater than 1"
         ],
         correct: [
             "Probability is between 0 and 1",
             "An impossible event has probability 0",
-            "The probabilities of all outcomes sum to 1"
+            "The sum of all probabilities is 1"
         ],
-        difficulty: "Medium",
         multiple: true
     },
     {
-        question: "What is the probability of rolling an even number on a fair six-sided die?",
-        options: ["1/6", "1/3", "1/2", "2/3"],
-        correct: ["1/2"],
-        difficulty: "Medium"
+        question: "7. What is the probability of rolling an even number on a fair die?",
+        answers: ["1/3", "1/2", "2/3", "1/6"],
+        correct: "1/2"
     },
     {
-        question: "Independent events are events where the occurrence of one does not change the probability of the other.",
-        options: ["True", "False"],
-        correct: ["True"],
-        difficulty: "Medium"
+        question: "8. Independent events are events where the occurrence of one does not affect the probability of the other.",
+        answers: ["True", "False"],
+        correct: "True"
     },
     {
-        question: "A bag contains 5 white and 3 black balls. Two balls are drawn without replacement. What is the probability that both are white?",
-        options: ["5/14", "5/8", "1/2", "10/14"],
-        correct: ["5/14"],
-        difficulty: "Hard"
+        question: "9. A bag has 5 white and 3 black balls. Two balls are drawn without replacement. What is the probability that both are white?",
+        answers: ["5/14", "1/2", "5/8", "10/64"],
+        correct: "5/14"
     },
     {
-        question: "A random variable X has P(0)=0.2, P(1)=0.5 and P(2)=0.3. Find E(X).",
-        options: ["0.8", "1.0", "1.1", "1.5"],
-        correct: ["1.1"],
-        difficulty: "Hard"
+        question: "10. Find E(X), if P(X=0)=0.2, P(X=1)=0.5, and P(X=2)=0.3.",
+        answers: ["0.8", "1.0", "1.1", "1.5"],
+        correct: "1.1"
     }
 ];
 
-
-// 2. VARIABLES
-
+// VARIABLES
 let currentQuestion = 0;
-let userAnswers = {};
+let userAnswers = [];
 
-
-// 3. GET HTML ELEMENTS
-
-const startPage = document.getElementById("start-page");
-const quizPage = document.getElementById("quiz-page");
-const resultPage = document.getElementById("result-page");
-
-const questionText = document.getElementById("question-text");
-const answersDiv = document.getElementById("answers");
-
-const numberText = document.getElementById("question-number");
-const difficultyText = document.getElementById("difficulty");
-
-const progressBar = document.getElementById("progress-bar");
-
-const prevBtn = document.getElementById("prev-btn");
+// HTML ELEMENTS
+const startBtn = document.getElementById("start-btn");
 const nextBtn = document.getElementById("next-btn");
-const finishBtn = document.getElementById("finish-btn");
+const restartBtn = document.getElementById("restart-btn");
 
+const quiz = document.getElementById("quiz");
+const result = document.getElementById("result");
 
-// 4. START QUIZ
+const questionText = document.getElementById("question");
+const answersDiv = document.getElementById("answers");
+const scoreText = document.getElementById("score");
 
-document.getElementById("start-btn").onclick = function() {
-    startPage.classList.add("hidden");
-    quizPage.classList.remove("hidden");
+// BUTTON EVENTS
+startBtn.addEventListener("click", startQuiz);
+nextBtn.addEventListener("click", nextQuestion);
+restartBtn.addEventListener("click", restartQuiz);
+
+// START QUIZ
+function startQuiz() {
+    currentQuestion = 0;
+    userAnswers = [];
+
+    startBtn.classList.add("hidden");
+    result.classList.add("hidden");
+    quiz.classList.remove("hidden");
 
     showQuestion();
-};
+}
 
-
-// 5. DISPLAY QUESTION
-
+// DISPLAY QUESTION
 function showQuestion() {
-
     const q = questions[currentQuestion];
 
-    numberText.textContent =
-        "Question " + (currentQuestion + 1) + " / 10";
-
-    difficultyText.textContent = q.difficulty;
-
     questionText.textContent = q.question;
-
-    document.getElementById("instruction").textContent =
-        q.multiple ? "Select all correct answers." : "Select one answer.";
-
-    progressBar.style.width =
-        ((currentQuestion + 1) / questions.length * 100) + "%";
-
     answersDiv.innerHTML = "";
 
-    q.options.forEach(function(option) {
+    if (q.multiple) {
+        q.answers.forEach(answer => {
+            const label = document.createElement("label");
+            const checkbox = document.createElement("input");
 
-        const label = document.createElement("label");
-        label.className = "answer";
+            checkbox.type = "checkbox";
+            checkbox.value = answer;
 
-        const input = document.createElement("input");
+            checkbox.checked =
+                Array.isArray(userAnswers[currentQuestion]) &&
+                userAnswers[currentQuestion].includes(answer);
 
-        input.type = q.multiple ? "checkbox" : "radio";
-        input.name = "answer";
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(" " + answer));
 
-        input.value = option;
-
-        const saved = userAnswers[currentQuestion] || [];
-
-        input.checked = saved.includes(option);
-
-        input.onchange = saveAnswer;
-
-        label.appendChild(input);
-        label.appendChild(document.createTextNode(option));
-
-        answersDiv.appendChild(label);
-    });
-
-    prevBtn.classList.toggle("hidden", currentQuestion === 0);
-
-    nextBtn.classList.toggle(
-        "hidden",
-        currentQuestion === questions.length - 1
-    );
-
-    finishBtn.classList.toggle(
-        "hidden",
-        currentQuestion !== questions.length - 1
-    );
-}
-
-
-// 6. SAVE ANSWER
-
-function saveAnswer() {
-
-    const selected = document.querySelectorAll(
-        'input[name="answer"]:checked'
-    );
-
-    userAnswers[currentQuestion] =
-        Array.from(selected).map(function(input) {
-            return input.value;
+            answersDiv.appendChild(label);
+            answersDiv.appendChild(document.createElement("br"));
         });
+
+    } else {
+        q.answers.forEach(answer => {
+            const button = document.createElement("button");
+
+            button.type = "button";
+            button.textContent = answer;
+
+            if (userAnswers[currentQuestion] === answer) {
+                button.style.backgroundColor = "#d66c9c";
+            }
+
+            button.addEventListener("click", function () {
+                userAnswers[currentQuestion] = answer;
+
+                answersDiv.querySelectorAll("button").forEach(btn => {
+                    btn.style.backgroundColor = "#f8d5e5";
+                });
+
+                button.style.backgroundColor = "#d66c9c";
+            });
+
+            answersDiv.appendChild(button);
+        });
+    }
+
+    nextBtn.textContent =
+        currentQuestion === questions.length - 1 ? "Finish" : "Next";
 }
 
+// NEXT QUESTION
+function nextQuestion() {
+    const q = questions[currentQuestion];
 
-// 7. NEXT QUESTION
+    if (q.multiple) {
+        const checkedBoxes =
+            answersDiv.querySelectorAll("input:checked");
 
-nextBtn.onclick = function() {
+        userAnswers[currentQuestion] = Array.from(checkedBoxes).map(
+            checkbox => checkbox.value
+        );
+    }
 
-    saveAnswer();
+    const answer = userAnswers[currentQuestion];
+
+    if (
+        answer === undefined ||
+        answer === null ||
+        (Array.isArray(answer) && answer.length === 0)
+    ) {
+        alert("Please select an answer before continuing!");
+        return;
+    }
 
     if (currentQuestion < questions.length - 1) {
         currentQuestion++;
         showQuestion();
+    } else {
+        finishQuiz();
     }
-};
+}
 
-
-// 8. PREVIOUS QUESTION
-
-prevBtn.onclick = function() {
-
-    saveAnswer();
-
-    if (currentQuestion > 0) {
-        currentQuestion--;
-        showQuestion();
-    }
-};
-
-
-// 9. FINISH QUIZ AND CHECK ANSWERS
-
-finishBtn.onclick = function() {
-
-    saveAnswer();
-
+// CHECK ANSWERS AND CALCULATE SCORE
+function finishQuiz() {
     let score = 0;
 
-    let reviewHTML = "";
+    questions.forEach((q, index) => {
+        const studentAnswer = userAnswers[index];
 
-    questions.forEach(function(q, index) {
+        if (q.multiple) {
+            const correctAnswers = [...q.correct].sort();
+            const selectedAnswers = [...(studentAnswer || [])].sort();
 
-        const user = userAnswers[index] || [];
+            const isCorrect =
+                correctAnswers.length === selectedAnswers.length &&
+                correctAnswers.every(
+                    (answer, i) => answer === selectedAnswers[i]
+                );
 
-        const correct = q.correct;
+            if (isCorrect) score++;
 
-        const isCorrect =
-            user.length === correct.length &&
-            correct.every(function(answer) {
-                return user.includes(answer);
-            });
-
-        if (isCorrect) {
+        } else if (studentAnswer === q.correct) {
             score++;
         }
-
-        reviewHTML += `
-            <div class="review-item">
-                <strong>Question ${index + 1}</strong><br>
-                Your answer: ${user.length ? user.join(", ") : "Not answered"}<br>
-                Correct answer: ${correct.join(", ")}<br>
-                Result: ${isCorrect ? "Correct ✓" : "Incorrect ✗"}
-            </div>
-        `;
     });
 
+    const percentage = (score / questions.length) * 100;
 
-    // 10. CALCULATE PERCENTAGE
+    quiz.classList.add("hidden");
+    result.classList.remove("hidden");
 
-    const percentage = Math.round(
-        (score / questions.length) * 100
-    );
+    scoreText.textContent =
+        `You got ${score} out of ${questions.length} correct (${percentage}%).`;
 
+    if (score === 10) {
+        scoreText.textContent += " Excellent work!";
+    } else if (score >= 7) {
+        scoreText.textContent += " Great job!";
+    } else if (score >= 5) {
+        scoreText.textContent += " Good effort! Keep practicing!";
+    } else {
+        scoreText.textContent += " Keep learning and try again!";
+    }
+}
 
-    // 11. SHOW RESULT
-
-    quizPage.classList.add("hidden");
-    resultPage.classList.remove("hidden");
-
-    document.getElementById("score").textContent =
-        score + " / " + questions.length;
-
-    document.getElementById("percentage").textContent =
-        percentage + "%";
-
-    document.getElementById("feedback").textContent =
-        percentage >= 80
-        ? "Excellent work! Keep it up!"
-        : percentage >= 50
-        ? "Good effort! Keep practicing!"
-        : "Keep learning. You can improve!";
-
-    document.getElementById("review").innerHTML =
-        reviewHTML;
-};
-
-
-// 12. RESTART QUIZ
-
-document.getElementById("restart-btn").onclick = function() {
-
+// RESTART QUIZ
+function restartQuiz() {
     currentQuestion = 0;
-    userAnswers = {};
+    userAnswers = [];
 
-    resultPage.classList.add("hidden");
-    startPage.classList.remove("hidden");
+    result.classList.add("hidden");
+    quiz.classList.remove("hidden");
 
-};
+    showQuestion();
+}
+
