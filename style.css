@@ -1,0 +1,157 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #fff1f5;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 700px;
+}
+
+.card {
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(199, 93, 131, 0.12);
+}
+
+h1 {
+    color: #c75d83;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+h2 {
+    color: #713c53;
+    margin: 25px 0;
+}
+
+p {
+    color: #795466;
+    text-align: center;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+
+button {
+    background: #e88eac;
+    color: white;
+    border: none;
+    padding: 13px 22px;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #c75d83;
+}
+
+#start-btn,
+#restart-btn {
+    display: block;
+    margin: 25px auto 0;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    color: #c75d83;
+    font-weight: bold;
+}
+
+.progress {
+    height: 9px;
+    background: #fce4ec;
+    border-radius: 10px;
+    margin-top: 20px;
+    overflow: hidden;
+}
+
+#progress-bar {
+    height: 100%;
+    width: 10%;
+    background: #e88eac;
+    transition: 0.3s;
+}
+
+.answer {
+    display: block;
+    padding: 15px;
+    border: 2px solid #f4c4d3;
+    border-radius: 12px;
+    margin: 12px 0;
+    cursor: pointer;
+    color: #713c53;
+}
+
+.answer:hover {
+    background: #fff0f5;
+}
+
+.answer input {
+    margin-right: 10px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+#review {
+    margin-top: 15px;
+}
+
+.review-item {
+    background: #fff1f5;
+    padding: 14px;
+    border-radius: 10px;
+    margin: 10px 0;
+    color: #713c53;
+    line-height: 1.6;
+}
+
+#score {
+    text-align: center;
+    color: #c75d83;
+    font-size: 35px;
+}
+
+#feedback {
+    text-align: center;
+    color: #795466;
+    margin: 15px 0;
+}
+
+@media (max-width: 500px) {
+    .card {
+        padding: 22px;
+    }
+
+    .buttons {
+        flex-wrap: wrap;
+    }
+
+    button {
+        padding: 12px 15px;
+    }
+}

@@ -1,188 +1,290 @@
+
+// 1. QUESTIONS
+
 const questions = [
     {
-        question: "1. What is the probability of getting heads when tossing a fair coin?",
-        answers: ["1/2", "1/3", "1/4", "1"],
-        correct: "1/2"
+        question: "What is the probability of getting heads when flipping a fair coin?",
+        options: ["1/4", "1/2", "1/3", "1"],
+        correct: ["1/2"],
+        difficulty: "Easy"
     },
     {
-        question: "2. What is the probability of rolling a 4 on a fair six-sided die?",
-        answers: ["1/2", "1/6", "1/3", "1/4"],
-        correct: "1/6"
+        question: "What is the probability of rolling a 4 on a fair six-sided die?",
+        options: ["1/2", "1/3", "1/6", "1/4"],
+        correct: ["1/6"],
+        difficulty: "Easy"
     },
     {
-        question: "3. A bag contains 3 red balls and 2 blue balls. What is P(red)?",
-        answers: ["2/5", "1/5", "3/5", "1/2"],
-        correct: "3/5"
+        question: "A bag contains 3 red balls and 2 blue balls. What is P(red)?",
+        options: ["2/5", "3/5", "1/2", "3/2"],
+        correct: ["3/5"],
+        difficulty: "Easy"
     },
     {
-        question: "4. Two fair coins are tossed. What is the probability of getting exactly one head?",
-        answers: ["1/4", "1/2", "3/4", "1"],
-        correct: "1/2"
+        question: "Two fair coins are tossed. What is the probability of getting exactly one head?",
+        options: ["1/4", "1/2", "3/4", "1"],
+        correct: ["1/2"],
+        difficulty: "Medium"
     },
     {
-        question: "5. What is the probability of selecting a King from a standard 52-card deck?",
-        answers: ["1/4", "1/13", "4/13", "1/52"],
-        correct: "1/13"
+        question: "What is the probability of drawing a king from a standard 52-card deck?",
+        options: ["1/4", "1/26", "1/13", "4/13"],
+        correct: ["1/13"],
+        difficulty: "Medium"
     },
     {
-        question: "6. Which statement about probability is correct?",
-        answers: [
-            ["Probability is between 0 and 1", "An impossible event has probability 0", "The sum of all probabilities is 1"],
-            "Probability can be greater than 1"
+        question: "Select all correct statements about probability.",
+        options: [
+            "Probability is between 0 and 1",
+            "An impossible event has probability 1",
+            "An impossible event has probability 0",
+            "The probabilities of all outcomes sum to 1"
         ],
         correct: [
             "Probability is between 0 and 1",
             "An impossible event has probability 0",
-            "The sum of all probabilities is 1"
+            "The probabilities of all outcomes sum to 1"
         ],
+        difficulty: "Medium",
         multiple: true
     },
     {
-        question: "7. What is the probability of rolling an even number on a fair die?",
-        answers: ["1/3", "1/2", "2/3", "1/6"],
-        correct: "1/2"
+        question: "What is the probability of rolling an even number on a fair six-sided die?",
+        options: ["1/6", "1/3", "1/2", "2/3"],
+        correct: ["1/2"],
+        difficulty: "Medium"
     },
     {
-        question: "8. Independent events are events where the occurrence of one does not affect the probability of the other.",
-        answers: ["True", "False"],
-        correct: "True"
+        question: "Independent events are events where the occurrence of one does not change the probability of the other.",
+        options: ["True", "False"],
+        correct: ["True"],
+        difficulty: "Medium"
     },
     {
-        question: "9. A bag has 5 white and 3 black balls. Two balls are drawn without replacement. What is the probability that both are white?",
-        answers: ["5/14", "1/2", "5/8", "10/64"],
-        correct: "5/14"
+        question: "A bag contains 5 white and 3 black balls. Two balls are drawn without replacement. What is the probability that both are white?",
+        options: ["5/14", "5/8", "1/2", "10/14"],
+        correct: ["5/14"],
+        difficulty: "Hard"
     },
     {
-        question: "10. Find E(X), if P(X=0)=0.2, P(X=1)=0.5, and P(X=2)=0.3.",
-        answers: ["0.8", "1.0", "1.1", "1.5"],
-        correct: "1.1"
+        question: "A random variable X has P(0)=0.2, P(1)=0.5 and P(2)=0.3. Find E(X).",
+        options: ["0.8", "1.0", "1.1", "1.5"],
+        correct: ["1.1"],
+        difficulty: "Hard"
     }
 ];
 
+
+// 2. VARIABLES
+
 let currentQuestion = 0;
-let score = 0;
-let userAnswers = [];
+let userAnswers = {};
 
-const startBtn = document.getElementById("start-btn");
-const nextBtn = document.getElementById("next-btn");
-const restartBtn = document.getElementById("restart-btn");
 
-const quiz = document.getElementById("quiz");
-const result = document.getElementById("result");
-const questionText = document.getElementById("question");
+// 3. GET HTML ELEMENTS
+
+const startPage = document.getElementById("start-page");
+const quizPage = document.getElementById("quiz-page");
+const resultPage = document.getElementById("result-page");
+
+const questionText = document.getElementById("question-text");
 const answersDiv = document.getElementById("answers");
-const scoreText = document.getElementById("score");
 
-startBtn.addEventListener("click", startQuiz);
-nextBtn.addEventListener("click", nextQuestion);
-restartBtn.addEventListener("click", restartQuiz);
+const numberText = document.getElementById("question-number");
+const difficultyText = document.getElementById("difficulty");
 
-function startQuiz() {
-    startBtn.classList.add("hidden");
-    quiz.classList.remove("hidden");
+const progressBar = document.getElementById("progress-bar");
+
+const prevBtn = document.getElementById("prev-btn");
+const nextBtn = document.getElementById("next-btn");
+const finishBtn = document.getElementById("finish-btn");
+
+
+// 4. START QUIZ
+
+document.getElementById("start-btn").onclick = function() {
+    startPage.classList.add("hidden");
+    quizPage.classList.remove("hidden");
+
     showQuestion();
-}
+};
+
+
+// 5. DISPLAY QUESTION
 
 function showQuestion() {
+
     const q = questions[currentQuestion];
+
+    numberText.textContent =
+        "Question " + (currentQuestion + 1) + " / 10";
+
+    difficultyText.textContent = q.difficulty;
 
     questionText.textContent = q.question;
+
+    document.getElementById("instruction").textContent =
+        q.multiple ? "Select all correct answers." : "Select one answer.";
+
+    progressBar.style.width =
+        ((currentQuestion + 1) / questions.length * 100) + "%";
+
     answersDiv.innerHTML = "";
 
-    if (q.multiple) {
-        q.answers[0].forEach(answer => {
-            const label = document.createElement("label");
-            const checkbox = document.createElement("input");
+    q.options.forEach(function(option) {
 
-            checkbox.type = "checkbox";
-            checkbox.value = answer;
+        const label = document.createElement("label");
+        label.className = "answer";
 
-            label.appendChild(checkbox);
-            label.appendChild(document.createTextNode(" " + answer));
-            answersDiv.appendChild(label);
-            answersDiv.appendChild(document.createElement("br"));
-        });
-    } else {
-        q.answers.forEach(answer => {
-            const button = document.createElement("button");
+        const input = document.createElement("input");
 
-            button.textContent = answer;
-            button.addEventListener("click", () => {
-                userAnswers[currentQuestion] = answer;
+        input.type = q.multiple ? "checkbox" : "radio";
+        input.name = "answer";
 
-                Array.from(answersDiv.children).forEach(item => {
-                    item.style.backgroundColor = "#f8d5e5";
-                });
+        input.value = option;
 
-                button.style.backgroundColor = "#d66c9c";
-            });
+        const saved = userAnswers[currentQuestion] || [];
 
-            answersDiv.appendChild(button);
-        });
-    }
+        input.checked = saved.includes(option);
 
-    nextBtn.textContent =
-        currentQuestion === questions.length - 1 ? "Finish" : "Next";
+        input.onchange = saveAnswer;
+
+        label.appendChild(input);
+        label.appendChild(document.createTextNode(option));
+
+        answersDiv.appendChild(label);
+    });
+
+    prevBtn.classList.toggle("hidden", currentQuestion === 0);
+
+    nextBtn.classList.toggle(
+        "hidden",
+        currentQuestion === questions.length - 1
+    );
+
+    finishBtn.classList.toggle(
+        "hidden",
+        currentQuestion !== questions.length - 1
+    );
 }
 
-function nextQuestion() {
-    const q = questions[currentQuestion];
 
-    if (q.multiple) {
-        const selected = Array.from(
-            answersDiv.querySelectorAll("input:checked")
-        ).map(input => input.value);
+// 6. SAVE ANSWER
 
-        userAnswers[currentQuestion] = selected;
-    }
+function saveAnswer() {
 
-    if (userAnswers[currentQuestion] === undefined) {
-        alert("Please select an answer!");
-        return;
-    }
+    const selected = document.querySelectorAll(
+        'input[name="answer"]:checked'
+    );
+
+    userAnswers[currentQuestion] =
+        Array.from(selected).map(function(input) {
+            return input.value;
+        });
+}
+
+
+// 7. NEXT QUESTION
+
+nextBtn.onclick = function() {
+
+    saveAnswer();
 
     if (currentQuestion < questions.length - 1) {
         currentQuestion++;
         showQuestion();
-    } else {
-        finishQuiz();
     }
-}
+};
 
-function finishQuiz() {
-    score = 0;
 
-    questions.forEach((q, index) => {
-        const userAnswer = userAnswers[index];
+// 8. PREVIOUS QUESTION
 
-        if (q.multiple) {
-            const correct = [...q.correct].sort().join("|");
-            const selected = [...(userAnswer || [])].sort().join("|");
+prevBtn.onclick = function() {
 
-            if (correct === selected) {
-                score++;
-            }
-        } else if (userAnswer === q.correct) {
+    saveAnswer();
+
+    if (currentQuestion > 0) {
+        currentQuestion--;
+        showQuestion();
+    }
+};
+
+
+// 9. FINISH QUIZ AND CHECK ANSWERS
+
+finishBtn.onclick = function() {
+
+    saveAnswer();
+
+    let score = 0;
+
+    let reviewHTML = "";
+
+    questions.forEach(function(q, index) {
+
+        const user = userAnswers[index] || [];
+
+        const correct = q.correct;
+
+        const isCorrect =
+            user.length === correct.length &&
+            correct.every(function(answer) {
+                return user.includes(answer);
+            });
+
+        if (isCorrect) {
             score++;
         }
+
+        reviewHTML += `
+            <div class="review-item">
+                <strong>Question ${index + 1}</strong><br>
+                Your answer: ${user.length ? user.join(", ") : "Not answered"}<br>
+                Correct answer: ${correct.join(", ")}<br>
+                Result: ${isCorrect ? "Correct ✓" : "Incorrect ✗"}
+            </div>
+        `;
     });
 
-    quiz.classList.add("hidden");
-    result.classList.remove("hidden");
 
-    const percentage = (score / questions.length) * 100;
+    // 10. CALCULATE PERCENTAGE
 
-    scoreText.textContent =
-        `You got ${score} out of 10 correct (${percentage}%).`;
-}
+    const percentage = Math.round(
+        (score / questions.length) * 100
+    );
 
-function restartQuiz() {
+
+    // 11. SHOW RESULT
+
+    quizPage.classList.add("hidden");
+    resultPage.classList.remove("hidden");
+
+    document.getElementById("score").textContent =
+        score + " / " + questions.length;
+
+    document.getElementById("percentage").textContent =
+        percentage + "%";
+
+    document.getElementById("feedback").textContent =
+        percentage >= 80
+        ? "Excellent work! Keep it up!"
+        : percentage >= 50
+        ? "Good effort! Keep practicing!"
+        : "Keep learning. You can improve!";
+
+    document.getElementById("review").innerHTML =
+        reviewHTML;
+};
+
+
+// 12. RESTART QUIZ
+
+document.getElementById("restart-btn").onclick = function() {
+
     currentQuestion = 0;
-    score = 0;
-    userAnswers = [];
+    userAnswers = {};
 
-    result.classList.add("hidden");
-    quiz.classList.remove("hidden");
+    resultPage.classList.add("hidden");
+    startPage.classList.remove("hidden");
 
-    showQuestion();
-}
+};
