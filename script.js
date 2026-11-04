@@ -1,4 +1,3 @@
-
 const questions = [
     {
         question: "1. What is the probability of getting heads when tossing a fair coin?",
@@ -62,11 +61,9 @@ const questions = [
     }
 ];
 
-// VARIABLES
 let currentQuestion = 0;
 let userAnswers = [];
 
-// HTML ELEMENTS
 const startBtn = document.getElementById("start-btn");
 const nextBtn = document.getElementById("next-btn");
 const restartBtn = document.getElementById("restart-btn");
@@ -78,12 +75,10 @@ const questionText = document.getElementById("question");
 const answersDiv = document.getElementById("answers");
 const scoreText = document.getElementById("score");
 
-// BUTTON EVENTS
 startBtn.addEventListener("click", startQuiz);
 nextBtn.addEventListener("click", nextQuestion);
 restartBtn.addEventListener("click", restartQuiz);
 
-// START QUIZ
 function startQuiz() {
     currentQuestion = 0;
     userAnswers = [];
@@ -95,7 +90,6 @@ function startQuiz() {
     showQuestion();
 }
 
-// DISPLAY QUESTION
 function showQuestion() {
     const q = questions[currentQuestion];
 
@@ -150,7 +144,6 @@ function showQuestion() {
         currentQuestion === questions.length - 1 ? "Finish" : "Next";
 }
 
-// NEXT QUESTION
 function nextQuestion() {
     const q = questions[currentQuestion];
 
@@ -182,7 +175,6 @@ function nextQuestion() {
     }
 }
 
-// CHECK ANSWERS AND CALCULATE SCORE
 function finishQuiz() {
     let score = 0;
 
@@ -225,7 +217,6 @@ function finishQuiz() {
     }
 }
 
-// RESTART QUIZ
 function restartQuiz() {
     currentQuestion = 0;
     userAnswers = [];
@@ -235,4 +226,3 @@ function restartQuiz() {
 
     showQuestion();
 }
-
